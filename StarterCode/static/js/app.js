@@ -31,6 +31,35 @@ function init() {
     });
 }
 
+// Make the demographics panel
+function demo(chosenValue) {
+    d3.json(url).then((data) => {
+        console.log(`Data: ${data}`);
+
+        // Establish metadata array
+        let metadata = data.metadata;
+        
+        // filter metadata
+        let filteredData = metadata.filter((meta) => meta.id == chosenValue);
+      
+        // Assign the first object
+        let object = filteredData[0]
+        
+        // select id in html in order to only pull desired data
+        d3.select("#sample-metadata").html("");
+  
+        let entries = Object.entries(obj);
+        
+        // Iterate through the entries array and append each h5 text for each key/value
+        entries.forEach(([key,value]) => {
+            d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
+        });
+
+        // Log the entries Array
+        console.log(entries);
+    });
+  }
+
 // Create bar chart
 function bar(chosenValue) {
     d3.json(url).then((data) => {
@@ -88,4 +117,3 @@ function bubble(chosenValue) {
         Plotly.newPlot("bubble", trace, layout);
     });
 }
-
