@@ -2,7 +2,7 @@
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json"
 
 
-// Establish foundation of data/graphs
+// Create dropdown including data
 function init() {
 
     // Use D3 to select the dropdown menu
@@ -31,34 +31,7 @@ function init() {
     });
 }
 
-// Make the demographics panel
-function demo(chosenValue) {
-    d3.json(url).then((data) => {
-        console.log(`Data: ${data}`);
-
-        // Establish metadata array
-        let metadata = data.metadata;
-        
-        // filter metadata
-        let filteredData = metadata.filter((meta) => meta.id == chosenValue);
-      
-        // Assign the first object
-        let object = filteredData[0]
-        
-        // select id in html in order to only pull desired data
-        d3.select("#sample-metadata").html("");
-  
-        let entries = Object.entries(obj);
-        
-        // Iterate through the entries array and append each h5 text for each key/value
-        entries.forEach(([key,value]) => {
-            d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
-        });
-
-        // Log the entries Array
-        console.log(entries);
-    });
-  }
+init();
 
 // Create bar chart
 function bar(chosenValue) {
@@ -80,7 +53,7 @@ function bar(chosenValue) {
             text: object.otu_labels.slice(0,10).reverse(),
             type: "bar",
             marker: {
-                color: "rgb(166,172,237)"
+                color: "rgb(60,150,255)"
             },
             orientation: "h"
         }];
@@ -89,6 +62,35 @@ function bar(chosenValue) {
         Plotly.newPlot("bar", trace);
     });
 }
+
+// Make the demographics legend
+function demo(chosenValue) {
+    d3.json(url).then((data) => {
+        console.log(`Data: ${data}`);
+
+        // Establish metadata array
+        let metadata = data.metadata;
+        
+        // filter metadata
+        let filteredData = metadata.filter((meta) => meta.id == chosenValue);
+      
+        // Assign the first object
+        let object = filteredData[0]
+        
+        // select id in html in order to only pull desired data
+        d3.select("#sample-metadata").html("");
+  
+        let entries = Object.entries(object);
+        
+        // Iterate through the entries array and append each h5 text for each key/value
+        entries.forEach(([key,value]) => {
+            d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
+        });
+
+        // Log the entries Array
+        console.log(entries);
+    });
+  }
 
 // Create bubble chart
 function bubble(chosenValue) {
@@ -106,7 +108,7 @@ function bubble(chosenValue) {
             marker: {
                 size: object.sample_values,
                 color: object.otu_ids,
-                colorscale: "Sunset"
+                colorscale: "Earth"
             }
         }];
     
@@ -116,4 +118,11 @@ function bubble(chosenValue) {
     
         Plotly.newPlot("bubble", trace, layout);
     });
+}
+
+// Toggle new plots when Test Subject is changed
+function optionChanged(chosenValue) {
+    demo(chosenValue);
+    bar(chosenValue);
+    bubble(chosenValue)
 }
