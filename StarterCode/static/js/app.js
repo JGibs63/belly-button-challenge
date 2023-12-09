@@ -44,7 +44,7 @@ function bar(chosenValue) {
         // Assign the first object
         let object = filteredData[0];
         
-        // Trace for the data for the horizontal bar chart
+        // Create trace for the bar chart
         let trace = [{
             x: object.sample_values.slice(0,10).reverse(),
             y: object.otu_ids.slice(0,10).map((otu_id) => `OTU ${otu_id}`).reverse(),
@@ -60,3 +60,32 @@ function bar(chosenValue) {
         Plotly.newPlot("bar", trace);
     });
 }
+
+// Create bubble chart
+function bubble(chosenValue) {
+    d3.json(url).then((data) => {
+
+        let samples = data.samples; 
+        let filteredData = samples.filter((sample) => sample.id === chosenValue);
+        let object = filteredData[0];
+    
+        let trace = [{
+            x: object.otu_ids,
+            y: object.sample_values,
+            text: object.otu_labels,
+            mode: "markers",
+            marker: {
+                size: object.sample_values,
+                color: object.otu_ids,
+                colorscale: "Sunset"
+            }
+        }];
+    
+        let layout = {
+            xaxis: {title: "OTU ID"}
+        };
+    
+        Plotly.newPlot("bubble", trace, layout);
+    });
+}
+
