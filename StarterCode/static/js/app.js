@@ -2,20 +2,20 @@
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json"
 
 
-// Create dropdown including data
+// Create dropdown with data
 function init() {
 
     // Use D3 to select the dropdown menu
     let dropdownMenu = d3.select("#selDataset");
 
-    // Fetch the JSON data and console log it
+    // Fetch the JSON data and add to console log
     d3.json(url).then((data) => {
         console.log(`Data: ${data}`);
 
-        // An array of id names
+        // Create an array of id names
         let names = data.names;
 
-        // Iterate through the names Array
+        // Iterate through the array and append
         names.forEach((name) => {
             dropdownMenu.append("option").text(name).property("value", name);
         });
@@ -23,7 +23,7 @@ function init() {
         // Assign the first name to name variable
         let name = names[0];
 
-        // Call functions to make the base graphics
+        // Call functions to base the charts on name variable
         demo(name);
         bar(name);
         bubble(name);
